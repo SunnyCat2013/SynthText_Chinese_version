@@ -78,7 +78,7 @@ class TextRegions(object):
 
             coords = np.c_[xs,ys].astype('float32')
             rect = cv2.minAreaRect(coords)          
-            box = np.array(cv2.cv.BoxPoints(rect))
+            box = np.array(cv2.boxPoints(rect))
             h,w,rot = TextRegions.get_hw(box,return_rot=True)
 
             f = (h > TextRegions.minHeight 
@@ -236,7 +236,7 @@ def get_text_placement_mask(xyz,mask,plane,pad=2,viz=False):
 
     # unrotate in 2D plane:
     rect = cv2.minAreaRect(pts_fp[0].copy().astype('float32'))
-    box = np.array(cv2.cv.BoxPoints(rect))
+    box = np.array(cv2.boxPoints(rect))
     R2d = su.unrotate2d(box.copy())
     box = np.vstack([box,box[0,:]]) #close the box for visualization
 
@@ -563,7 +563,7 @@ class RendererV3(object):
             # change shape from 2x4xn_i -> (4*n_i)x2
             cc = np.squeeze(np.concatenate(np.dsplit(cc,cc.shape[-1]),axis=1)).T.astype('float32')
             rect = cv2.minAreaRect(cc.copy())
-            box = np.array(cv2.cv.BoxPoints(rect))
+            box = np.array(cv2.boxPoints(rect))
 
             # find the permutation of box-coordinates which
             # are "aligned" appropriately with the character-bb.
