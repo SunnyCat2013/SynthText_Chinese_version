@@ -4,17 +4,27 @@ import os, sys, traceback
 import os.path as osp
 import wget, tarfile
 import cv2
+from PIL import Image
+
+def get_data(DB_FNAME):
+  """
+  Download the image,depth and segmentation data:
+  Returns, the h5 database.
+  """
+
+  return h5py.File(DB_FNAME,'r')
 
 
 
 
 def add_more_data_into_dset(DB_FNAME,more_img_file_path,more_depth_path,more_seg_path):
-  db=h5py.File(DB_FNAME,'wb+')
+  # db=h5py.File(DB_FNAME,'wb+')
+  db=h5py.File(DB_FNAME,'a')
   depth_db=get_data(more_depth_path)
   seg_db=get_data(more_seg_path)
-  db.create_group('image')
-  db.create_group('depth')
-  db.create_group('seg')
+  # db.create_group('image')
+  # db.create_group('depth')
+  # db.create_group('seg')
   for imname in os.listdir(more_img_file_path):
     if imname.endswith('.jpg'):
       full_path=more_img_file_path+imname
@@ -22,8 +32,9 @@ def add_more_data_into_dset(DB_FNAME,more_img_file_path,more_depth_path,more_seg
       
       j=Image.open(full_path)
       imgSize=j.size
-      rawData=j.tostring()
-      img=Image.fromstring('RGB',imgSize,rawData)
+      # rawData=j.tostring()
+      rawData=j.tobytes()
+      img=Image.frombytes('RGB',imgSize,rawData)
       #img = img.astype('uint16')
       db['image'].create_dataset(imname,data=img)
       db['depth'].create_dataset(imname,data=depth_db[imname])
@@ -36,11 +47,11 @@ def add_more_data_into_dset(DB_FNAME,more_img_file_path,more_depth_path,more_seg
 
 
 # path to the data-file, containing image, depth and segmentation:
-DB_FNAME = '/home/yuz/lijiahui/syntheticdata/SynthText/more_data_from_off/dset_8000.h5'
+DB_FNAME = './data/dset.h5'
 
 #add more data into the dset
-more_depth_path='/home/yuz/lijiahui/syntheticdata/SynthText/more_data_from_off/depth.h5'
-more_seg_path='/home/yuz/lijiahui/syntheticdata/SynthText/more_data_from_off/seg.h5'
-more_img_file_path='/home/yuz/lijiahui/syntheticdata/SynthText/more_data_from_off/bg_img/'
+more_depth_path='./results/depth.h5'
+more_seg_path='./prep_scripts/seg_uint16.h5'
+more_img_file_path='../synthetic_image/images/'
 
 add_more_data_into_dset(DB_FNAME,more_img_file_path,more_depth_path,more_seg_path)

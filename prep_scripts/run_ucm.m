@@ -23,9 +23,14 @@ ucms = cell(numel(imname),1);
 
 %parpool('AGLocal',4);
 parfor i = 1:numel(imname)
-	fprintf('%d of %d\n',i,numel(imname));
+    disp(imname{i})
+    if strcmp(imname{i}, '.') || strcmp(imname{i}, '..')
+        continue
+    end
+	fprintf(': %d of %d\n',i,numel(imname));
+    
 	try
-    im_name = fullfile(img_dir,imname{i});
+        im_name = fullfile(img_dir,imname{i});
 		im = imread(im_name);
 	catch
 		fprintf('err\n');
