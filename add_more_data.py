@@ -22,9 +22,9 @@ def add_more_data_into_dset(DB_FNAME,more_img_file_path,more_depth_path,more_seg
   db=h5py.File(DB_FNAME,'a')
   depth_db=get_data(more_depth_path)
   seg_db=get_data(more_seg_path)
-  # db.create_group('image')
-  # db.create_group('depth')
-  # db.create_group('seg')
+  db.create_group('image')
+  db.create_group('depth')
+  db.create_group('seg')
   for imname in os.listdir(more_img_file_path):
     if imname.endswith('.jpg'):
       full_path=more_img_file_path+imname
