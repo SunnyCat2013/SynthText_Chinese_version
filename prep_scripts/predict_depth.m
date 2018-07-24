@@ -14,20 +14,22 @@ function predict_depth()
     % dir_matConvNet='../libs/matconvnet/matlab/';
     dir_matConvNet='/Users/lizhenyang/jd/synthetic_image/fayao-dcnf-fcsp-f66628a4a991/libs/matconvnet/matlab/';
     addpath(genpath(dir_matConvNet));
+    addpath('../../synthetic_image/fayao-dcnf-fcsp-f66628a4a991/demo')
     run([dir_matConvNet 'vl_setupnn.m']);
+    
 
     opts=[];
     opts.useGpu=false;
     opts.inpaint = true;
     opts.normalize_depth = false; % limit depth to [0,1]
     %opts.imdir = '/path/to/image/dir';
-    opts.imdir = '/Users/lizhenyang/jd/synthetic_image/images';
+    opts.imdir = '../../synthetic_image/images';
     %opts.out_h5 = '/path/to/save/output/depth.h5';
-    opts.out_h5 = '/Users/lizhenyang/jd/SynthText_Chinese_version/results/depth.h5';
+    opts.out_h5 = '../results/depth_lzy.h5';
     % these should point to the pre-trained models from:
     %  https://bitbucket.org/fayao/dcnf-fcsp/
-    opts.model_file.indoor =  '/Users/lizhenyang/jd/synthetic_image/fayao-dcnf-fcsp-f66628a4a991/model_trained/model_dcnf-fcsp_NYUD2.mat';
-    opts.model_file.outdoor =  '/Users/lizhenyang/jd/synthetic_image/fayao-dcnf-fcsp-f66628a4a991/model_trained/model_dcnf-fcsp_Make3D.mat';
+    opts.model_file.indoor =  '../../synthetic_image/fayao-dcnf-fcsp-f66628a4a991/model_trained/model_dcnf-fcsp_NYUD2.mat';
+    opts.model_file.outdoor =  '../../synthetic_image/fayao-dcnf-fcsp-f66628a4a991/model_trained/model_dcnf-fcsp_Make3D.mat';
 
     fprintf('\nloading trained model...\n\n');
     mdl = load(opts.model_file.indoor);
