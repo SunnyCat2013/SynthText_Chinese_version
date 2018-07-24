@@ -49,7 +49,7 @@ function predict_depth()
     for i = 1:N
         fprintf('%d of %d\n',i,N);
         imname = imnames{i};
-        if imname == '.'
+        if imname == '.' || imname == '..'
             continue
         end
         disp(['imname' imname])
